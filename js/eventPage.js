@@ -1,6 +1,6 @@
 chrome.contextMenus.removeAll();
 
-chrome.contextMenus.create({ id: "Add","title": "Add Face To Person", "contexts":["image"]});
+chrome.contextMenus.create({ id: "Add","title": "Add Face to Person", "contexts":["image"]});
 
 getPersonList(function(result){
     var personlist=result.person;
@@ -32,16 +32,16 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 //TODO: test sul blocco per numero di facce numero di facce 
                 console.log(result.face.length);
                 if(face_ids.length>1){
-                    chrome.notifications.create(createNotificationOption("Error","Too many faces"));
+                    chrome.notifications.create(createNotificationOption("Error","Too many faces."));
                     return;
                 }
                 if(face_ids.length==0){
-                    chrome.notifications.create(createNotificationOption("Error","No Face Detected"));
+                    chrome.notifications.create(createNotificationOption("Error","No Face Detected."));
                     return;
                 }
                 else{
                     addFace(face_ids[0],p_name_to_add,function(result){
-                        chrome.notifications.create(createNotificationOption("Success","Face Added"));
+                        chrome.notifications.create(createNotificationOption("Success","Face Added."));
                     },function(err){
                         chrome.notifications.create(createNotificationOption("Error","Impossible to add face, retry:"+err.error));
                     });
@@ -51,7 +51,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             });
         }       //END IF CHECK DIMENSION
         else{
-            chrome.notifications.create(createNotificationOption("Error","Image too small"));
+            chrome.notifications.create(createNotificationOption("Error","Image too small."));
         }
     }); //END LOAD EVENT LISTENER
 });
