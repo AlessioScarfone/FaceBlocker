@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>FaceBlocker Person Manager</title>
+        <link rel="stylesheet" href="semanticUI/semantic.min.css">
+        <link rel="stylesheet" href="css/editor.css">
+        <script src="js/lib/jquery-2.2.2.min.js"></script>
+        
+        <script src="semanticUI/semantic.min.js"></script>
+        <script src="noty/jquery.noty.packaged.min.js"></script>        
+        
+        <script src="js/lib/facepp-sdk.min.js"></script>
+        <script src="js/lib/q.js"></script>
+        <script src="js/lib/facePPWrapper.js"></script>
+        <script src="js/editor.js"></script>
+    </head>
+    <body>
+        <div class="ui container">
+            <h1 class="ui center aligned header">Person Manger</h1>
+            <div class="ui grid" id="wrap">
+                <div class="one row">
+                    <button class="ui primary button" id="getPersonList">Person List</button> 
+                    <button class="ui red button hide" id="delete">Delete</button> 
+                    <button class="ui green button hide" id="face-stored">Face Stored</button> 
+                    <h4 id="face-number"></h4>
+                    <!-- TODO Aggiungi bottone per vedere numero di facce memorizzate (INFO persona) -->
+                </div>
+                <ul id="person-list"></ul> 
+
+                <div class="one row">
+                    <button class="ui primary button" id="create" >Create</button> 
+                    <div class="ui input">
+                        <input id="create-input"   type="text" placeholder="Create...">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+</html>

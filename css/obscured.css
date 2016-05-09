@@ -1,0 +1,33 @@
+.obscured{
+    background-image: url("https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/stop-256.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.not-obscured{
+    border:5px solid lightgreen !important;
+}
+
+.ignored-for-dimension{
+    border:5px solid lightcoral !important;
+}
+
+.no-face-detect{
+    border:5px solid gray !important;
+}
+
+.double-face-detect{
+     border:5px solid yellow !important;
+}
+
+.double-face-detect.not-obscured{
+    border: 5px solid green !important;
+}
+
+.double-face-detect.not-obscured.obscured{
+    border: 0px;
+}
+
+.error{
+    border: 7px dotted RED !important;
+}

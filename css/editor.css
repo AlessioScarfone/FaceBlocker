@@ -1,0 +1,17 @@
+#wrap{
+    width: 90%;
+}
+body{
+    margin: 10px;
+}
+.hide{
+    display: none !important;
+}
+
+#person-list li{
+    list-style-type:none;
+}
+
+#face-number{
+    margin-left: 15px;
+}
