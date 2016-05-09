@@ -1,6 +1,7 @@
 body{
+    margin: 15px !important;
     min-width:200px;
-    min-height:200px; 
+    max-height:300px; 
 }
 
 .hide{
@@ -11,10 +12,3 @@ body{
     list-style-type:none;
 }
 
-#run_script{
-    margin-top:5px;
-}
-
-.inline-btn{
-    display: block;
-}

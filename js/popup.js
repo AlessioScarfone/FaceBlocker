@@ -38,7 +38,7 @@ $(function(){
 
     function showCurrentPerson(){
         chrome.storage.local.get("selectedPerson", function(returnData) {
-            currentPersonElem.text("Current Person: " + returnData.selectedPerson);
+            currentPersonElem.text(returnData.selectedPerson);
         });
     };
 
