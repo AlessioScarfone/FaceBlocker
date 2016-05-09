@@ -9,7 +9,7 @@ getPersonList(function(result){
         person_name.push(elem.person_name);
     });
     person_name.forEach(function(elem){
-        chrome.contextMenus.create({ id: elem,"title": elem, "parentId": "Add","contexts":["image"]});
+        chrome.contextMenus.create({ id: elem,title: elem, parentId: "Add",contexts:["image"]});
     });
 });
 
@@ -29,7 +29,6 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 var face_ids=[];
                 for(var index=0;index<result.face.length;index++)
                     face_ids.push(result.face[index].face_id);
-                //TODO: test sul blocco per numero di facce numero di facce 
                 console.log(result.face.length);
                 if(face_ids.length>1){
                     chrome.notifications.create(createNotificationOption("Error","Too many faces."));

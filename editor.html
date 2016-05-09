@@ -17,30 +17,26 @@
     </head>
     <body>
         <div class="ui container">
-            <h1 class="ui center aligned header">Person Manger</h1>
+            <h1 class="ui center aligned header">Person Manager</h1>
             <div class="ui grid" id="wrap">
-                <div class="one row">
-                    <button class="ui primary button" id="getPersonList">Person List</button> 
-                    <button class="ui red button hide" id="delete">Delete</button> 
-                    <button class="ui green button hide" id="face-stored">Face Stored</button> 
-                    <h4 id="face-number"></h4>
-                    <!-- TODO Aggiungi bottone per vedere numero di facce memorizzate (INFO persona) -->
-                </div>
-                <ul id="person-list"></ul> 
-
-                <div class="one row">
+                <div class="row">
                     <button class="ui primary button" id="create" >Create</button> 
                     <div class="ui input">
                         <input id="create-input"   type="text" placeholder="Create...">
                     </div>
                 </div>
-
+                <div class="row">
+                    <button class="ui primary button" id="getPersonList">Person List</button> 
+                    <button class="ui red button hide" id="delete">Delete</button> 
+                    <button class="ui green button hide" id="face-stored">Face Stored</button> 
+                    <h4 id="face-number"></h4>
+                </div>
+                <ul id="person-list"></ul> 
             </div>
-
         </div>
 
 
-
+        <!-- confirm dialog -->
         <div class="ui small modal">
             <div class="header">
                 Delete Person
