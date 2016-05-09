@@ -1,1 +1,1 @@
-# FaceBlocker
+# FaceBlocker - Chrome Extension
