@@ -1,19 +1,21 @@
-//FIXME : imposta una persona di default(o mostra un errore all'utente) se la persona corrente è undefined
+//FIXME : imposta una persona di default se la persona corrente è undefined ->Background page (eventPage.js)
+//TODO: image format unsupported
 //TODO: resize image too big
 
 var p_name;
 
 chrome.storage.local.get("selectedPerson", function (returnData) {
     p_name = returnData.selectedPerson;
-    //    console.info("Person to block:" + p_name);
+//    console.info("Person to block:" + p_name);
     $(function () {
         trainPerson(p_name);
         //DATI PERSONA SELEZIONATA
-        // getPersonInfo(p_name,function(res){
-        // console.log(p_name+" - numero di facce:"+res.face.length);
-        // });
+        //    getPersonInfo(p_name,function(res){
+        //        console.log(p_name+" - numero di facce:"+res.face.length);
+        //    });
 
         var imgs = $("img");
+//        console.info("img Start:" + imgs.length);
         for (var i = 0; i < imgs.length; i++) {
             checkFace(imgs[i]);
         }
@@ -42,7 +44,7 @@ function blockFace(summaries) {
     }
     if(summaries[0].hasOwnProperty('valueChanged')){
         var valueChanged = summaries[0].valueChanged;
-        // console.log("VC:"+valueChanged.length);
+        //        console.log("VC:"+valueChanged.length);
         for (var i = 0; i < valueChanged.length; i++) {
             checkFace(valueChanged[i]);
         }
@@ -55,10 +57,9 @@ function checkFace(element) {
         var currentImg = $(element);
 
     var img_url = currentImg.attr("src");
-    // if(img_url==undefined){
-    // console.info(currentImg);
-    // }
-
+    //        if(img_url==undefined){
+    //            console.info(currentImg);
+    //        }
     //Get src of bigger image in srcset
     if (currentImg[0].hasAttribute("srcset")) {
         var srcsetType = currentImg.attr("srcset").split(",");
@@ -66,7 +67,7 @@ function checkFace(element) {
         biggerImg = biggerImg.split(" ");
         img_url = biggerImg[1];
     }
-
+    
     //HACK FOR LAZY LOADER
     if(currentImg[0].hasAttribute("data-original")){
         img_url=currentImg.attr("data-original");
@@ -91,7 +92,7 @@ function checkFace(element) {
 
                     if (face_ids.length > 1) {
                         currentImg.addClass("double-face-detect");
-                        // console.log(face_ids);
+                        //console.log(face_ids);
                     }
                     if (face_ids.length == 0) {
                         currentImg.addClass("no-face-detect");
@@ -103,7 +104,7 @@ function checkFace(element) {
                             if (res.is_same_person == true) {
                                 obscure(currentImg);
                             } else {
-                                // console.info("notObscured->url: "+img_url);
+                                //                        console.info("notObscured->url: "+img_url);
                                 currentImg.addClass("not-obscured");
                             }
                         }); //END VERIFY
@@ -140,13 +141,15 @@ function obscure(img) {
 //    return true;
 //}
 
+
 function isDataUri(img_url) {
     if (/^data:image/.test(img_url)) {
-        // console.info(img_url+" -> DataURI");
+        //        console.info(img_url+" -> DataURI");
         return true;
     }
     return false;
 }
+
 
 // If url is relative, convert to absolute.
 function relativeToAbsoluteUrl(url) {
