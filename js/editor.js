@@ -28,6 +28,7 @@ $(function () {
             for (var i = 0; i < p_list.length; i++) {
                 personList.append("<li><input type='radio' name=p_name value=" + p_list[i].person_name + ">" + p_list[i].person_name + "</input></li>");
                 $("input:radio").change(function () {
+                    faceNumber.text("");
                     showButton();
                 });
             }

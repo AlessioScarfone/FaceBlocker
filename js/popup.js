@@ -41,7 +41,6 @@ $(function(){
             currentPersonElem.text(returnData.selectedPerson);
         });
     };
-
     function clearPersonList(){
         selectionFrom.children().remove();
     }

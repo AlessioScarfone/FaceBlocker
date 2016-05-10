@@ -1,3 +1,5 @@
+setDefaultPerson();
+
 chrome.contextMenus.removeAll();
 
 chrome.contextMenus.create({ id: "Add","title": "Add Face to Person", "contexts":["image"]});
@@ -55,6 +57,12 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     }); //END LOAD EVENT LISTENER
 });
 
+/**
+ * Create option for create a chrome notification
+ * @param   {string} title   Title of notification
+ * @param   {string} message Body of notification
+ * @returns {Object}   option for chrome notification
+ */
 function createNotificationOption(title,message){
     var iconURL;
 
@@ -74,10 +82,17 @@ function createNotificationOption(title,message){
     return opt;
 }
 
-
-function getImageSize(url){   
-
+/**
+ * Set Default Person if current person to block is undefined
+ */
+function setDefaultPerson(){
+    chrome.storage.local.get("selectedPerson", function (returnData) {
+        var p_name = returnData.selectedPerson;
+        if(p_name===undefined || p_name===null){
+            getPersonList(function(res){
+                p_name=res.person[0].person_name;
+                chrome.storage.local.set({"selectedPerson":p_name});
+            });
+        }
+    });
 }
-
-
-

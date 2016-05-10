@@ -1,4 +1,3 @@
-//FIXME : imposta una persona di default(o mostra errore all'utente) se la persona corrente è undefined
 //TODO: image format unsupported (webp,svg) 
 //TODO: resize image too big (The picture should be smaller than 3M with at least 16*16 pixels face area.)
 

@@ -1,3 +1,5 @@
+//TODO function doc
+
 //var api = new FacePP('0ef14fa726ce34d820c5a44e57fef470', '4Y9YXOMSDvqu1Ompn9NSpNwWQFHs1hYD'); //EXAMPLE KEY
 
 var api = new FacePP('c6a7023e6aa59320fb5276f0a9e3816e', 'ppnYzIQQjz_BNnCh6AfOI3NqfshoTV9i');       

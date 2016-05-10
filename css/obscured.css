@@ -1,5 +1,6 @@
 .obscured{
-    background-image: url("https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/stop-256.png");
+/* background-image: url("https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/stop-256.png");*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/stop-256.png');
     background-repeat: no-repeat;
     background-position: center;
 }
