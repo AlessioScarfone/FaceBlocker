@@ -1,17 +1,32 @@
-#wrap{
+#wrap {
     width: 90%;
 }
-body{
+
+body {
     margin: 10px;
 }
-.hide{
+
+.hide {
     display: none !important;
 }
 
-#person-list li{
-    list-style-type:none;
+#person-list li {
+    list-style-type: none;
 }
 
-#face-number{
+
+#face-number {
     margin-left: 15px;
+}
+
+#upload {
+    margin: 10px 0px;
+}
+
+.content {
+    margin-bottom: 2px;
+}
+
+input[type="radio"]{
+    margin-left: 10px;
 }

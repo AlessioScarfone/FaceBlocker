@@ -1,4 +1,5 @@
 $(function () {
+
     var create_input = $("#create-input");
     var personList = $("#person-list");
     var createBtn = $("#create");
@@ -6,6 +7,11 @@ $(function () {
     var personListBtn = $("#getPersonList");
     var face_storedBtn = $("#face-stored");
     var faceNumber = $("#face-number");
+    var uploadBtn = $("#upload_button");
+    var addFaceBtn = $("#add");
+    var fileNumber = $("#file_number");
+
+    var fileInput = document.getElementById('file');
 
     createBtn.on("click", function () {
         if (create_input.val() != "") {
@@ -37,6 +43,18 @@ $(function () {
         });
     });
 
+    $("#file").change(function(){
+        console.log("fire");
+        addFaceBtn.removeClass("hide");
+        fileNumber.removeClass("hide");
+        fileNumber.text("File upload:"+fileInput.files.length);
+    });
+    
+    addFaceBtn.on("click",function(){
+        //TODO: evento aggiunta 
+    });
+
+
     deleteBtn.on("click", function () {
         $('.small.modal').modal("setting", {
             onApprove: function () {
@@ -50,7 +68,7 @@ $(function () {
             }
         }).modal('show');
     });
-    
+
     face_storedBtn.on("click", function () {
         var selectedPerson = $('input[type=radio]:checked').val();
         getPersonInfo(selectedPerson, function (res) {
@@ -80,13 +98,19 @@ $(function () {
     function hideButton() {
         deleteBtn.addClass("hide");
         face_storedBtn.addClass("hide");
+        uploadBtn.addClass("hide");
         faceNumber.text("");
+        addFaceBtn.addClass("hide");
+        fileNumber.addClass("hide");
     }
 
     function showButton() {
         deleteBtn.removeClass("hide");
         face_storedBtn.removeClass("hide");
+        uploadBtn.removeClass("hide");
+
     }
+    
 
 
 });
