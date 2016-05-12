@@ -1,13 +1,27 @@
 body{
     margin: 15px !important;
     min-width:200px;
-    max-height:300px; 
+    max-height:250px; 
+}
+
+.ui.container{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .hide{
     display: none !important;
 }
 
-#selection li{
-    list-style-type:none;
+#selection{
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
+
+input[type="radio"] {
+    vertical-align: middle !important;
+}
+label{
+    font-size: 1.2em;
+    margin-left: 5px;
 }

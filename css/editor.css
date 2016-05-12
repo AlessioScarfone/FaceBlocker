@@ -1,32 +1,57 @@
-#wrap {
-    width: 90%;
-}
-
 body {
-    margin: 10px;
+    margin: 20px 10px 10px 10px;
 }
 
 .hide {
     display: none !important;
 }
 
-#person-list li {
-    list-style-type: none;
-}
-
-
 #face-number {
     margin-left: 15px;
-}
-
-#upload {
-    margin: 10px 0px;
+    margin-top: 0px;
+    padding: 8px 0;
 }
 
 .content {
     margin-bottom: 2px;
 }
 
-input[type="radio"]{
-    margin-left: 10px;
+input[type="radio"] {
+    vertical-align: middle !important;
+}
+
+label {
+    font-size: 1.2em;
+    margin-left: 5px;
+}
+
+.message.error hr {
+    color: indianred;
+    background-color: indianred;
+    text-align: center;
+    margin: 0 auto;
+    height: 1px;
+    /*    border:none;*/
+}
+
+.message.error{
+}
+
+#header_hr{
+    height: 2px;
+    color:lightgrey;
+    background-color: lightgrey;
+    border:none;
+    margin-bottom:25px;    
+}
+
+#control_panel{
+    padding-top: 25px;
+    padding-bottom:10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#upload_button{
+    margin-bottom:10px;
 }

@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
     <head>
         <meta charset="UTF-8">
         <title>FaceBlocker Person Manager</title>
@@ -8,46 +9,68 @@
         <script src="js/lib/jquery-2.2.2.min.js"></script>
 
         <script src="semanticUI/semantic.min.js"></script>
-        <script src="noty/jquery.noty.packaged.min.js"></script>        
+        <script src="noty/jquery.noty.packaged.min.js"></script>
 
         <script src="js/lib/facepp-sdk.min.js"></script>
         <script src="js/lib/q.js"></script>
         <script src="js/lib/facePPWrapper.js"></script>
         <script src="js/editor.js"></script>
     </head>
+
     <body>
         <div class="ui container">
-            <h1 class="ui center aligned header">Person Manager</h1>
-            <div class="ui grid" id="wrap">
-                <div class="row">
-                    <button class="ui primary button" id="create" >Create</button> 
-                    <div class="ui input">
-                        <input id="create-input"   type="text" placeholder="Create...">
+            <div class="ui piled segment">
+                <h1 class="ui center aligned icon header">
+                    <i class="circular users icon"></i>
+                    <div class="content">
+                        <em> Person Manager</em>
+                        <div class="sub header">Manage people in the system.<br>
+                            Create. Delete. Add Face.</div>
+                    </div>
+                </h1>
+            </div>
+            <hr id="header_hr">
+            <div class="ui raised segment grid" id="control_panel">
+                <div class="ui active inverted dimmer my-loader hide">
+                    <div class="ui large text loader my-loader hide">Loading</div>
+                </div>
+                    <div class="row">
+                        <button class="ui primary button" id="create">Create</button>
+                        <div class="ui input">
+                            <input id="create-input" type="text" placeholder="Create...">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button class="ui primary button" id="getPersonList">Person List</button>
+                        <button class="ui red button hide" id="delete">Delete</button>
+                        <button class="ui green button hide" id="face-stored">Face Stored</button>
+                        <h4 id="face-number"></h4>
+                    </div>
+                    <div id="person-list"></div>
+
+                    <!-- ADD FROM FILE -->
+                    <div class="row one column">
+                        <div>
+                            <label for="file" class="ui icon button hide" id="upload_button">
+                                <i class="file icon"></i> Add Face from File</label>
+                            <input type="file" id="file" style="display:none" accept="image/x-png, image/jpeg" multiple>
+                            <button class="ui primary button hide" id="add">Add Face</button>
+                            <span id="file_number" class="ui message info hide"></span>
+                            <div id="error_list_message" class="ui icon message error hide">
+                                <i class="close icon"></i>
+                                <i class="remove user icon"></i>
+                                <div class="content">
+                                    <div class="header">
+                                        ERROR:
+                                    </div>
+                                    <ul id="error_list" class="list">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <button class="ui primary button" id="getPersonList">Person List</button> 
-                    <button class="ui red button hide" id="delete">Delete</button> 
-                    <button class="ui green button hide" id="face-stored">Face Stored</button> 
-                    <h4 id="face-number"></h4>
-                </div>
-                <ul id="person-list"></ul> 
-
-                <div class="row one column">
-                    <div id="upload">
-                        <label for="file" class="ui icon button hide" id="upload_button">
-                            <i class="file icon"></i>
-                            Add Face from File</label>
-                        <input type="file" id="file" style="display:none" accept="image/x-png, image/jpeg" multiple>
-                        <button class="ui primary button hide" id="add">Add Face</button> 
-                        <span id="file_number" class="ui message info hide"></span>
-
-                    </div>
-
-                </div>
-            </div>        <!-- END WRAP -->
-        </div>
-
+        </div>    <!-- END CONTAINER -->
 
         <!-- confirm dialog -->
         <div class="ui small modal">
@@ -69,5 +92,8 @@
         </div>
 
 
+
+
     </body>
+
 </html>

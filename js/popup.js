@@ -14,7 +14,7 @@ $(function(){
                 appendRadioButton(p_list[i].person_name);
             }
         },function(err){
-            selectionFrom.text("error!");
+            selectionFrom.append("<h3 class='ui message error'>Error!</h3>");
         });
     });
 
@@ -45,7 +45,7 @@ $(function(){
         selectionFrom.children().remove();
     }
     function appendRadioButton(text){
-        selectionFrom.append("<li><input type='radio' name='p_name' value="+text+">"+text+"</input></li>")
+        selectionFrom.append("<input type='radio' name='p_name' class='ui radio checkbox' value="+text+" id='"+text+"'><label for='"+text+"'>"+text+"</label><br>")
     };
 
 });
