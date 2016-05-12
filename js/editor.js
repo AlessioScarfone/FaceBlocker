@@ -10,9 +10,9 @@ var errorCodeList = {
     1302: "IMAGE_ERROR_FAILED_TO_DOWNLOAD",
     1303: "IMAGE_ERROR_FILE_TOO_LARGE",
     1304: "IMAGE_ERROR",
-    1501:	"BAD_NAME",
+    1501: "BAD_NAME",
     1502: "BAD_TAG",
-    1503:	"NAME_EXIST",
+    1503: "NAME_EXIST",
     "-1": "Error to contact server"
 }
 
@@ -41,7 +41,7 @@ $(function () {
                 notify("Person created", "success");
                 personListBtn.click();
             }, function (err) {
-                notify("Impossible to create person: " + create_input.val()+" - "+errorCodeList[err], "error");
+                notify("Impossible to create person: " + create_input.val() + " - " + errorCodeList[err], "error");
             });
         } else {
             notify("Empty input", "warning");
@@ -50,23 +50,23 @@ $(function () {
 
     personListBtn.on("click", function () {
         $(".my-loader").removeClass("hide");
-            hideButton();
-            getPersonList(function (result) {
-                clearList();
-                var p_list = result.person;
-                for (var i = 0; i < p_list.length; i++) {
-                    var person = p_list[i].person_name;
-                    personList.append("<input type='radio' class='ui radio checkbox' name=p_name value=" + person + " id='" + person + "'><label for='" + p_list[i].person_name + "'>" + p_list[i].person_name + "</label><br>");
-                    $("input:radio").change(function () {
-                        faceNumber.text("");
-                        showButton();
-                        selectedPerson = $('input[type=radio]:checked').val();
-                    });
-                }
-            }, function (err) {
-                personList.append("<h3 class='ui message error'>Error: - "+errorCodeList[err]+"</h3>");
-            });
-            $(".my-loader").addClass("hide");
+        hideButton();
+        getPersonList(function (result) {
+            clearList();
+            var p_list = result.person;
+            for (var i = 0; i < p_list.length; i++) {
+                var person = p_list[i].person_name;
+                personList.append("<input type='radio' class='ui radio checkbox' name=p_name value=" + person + " id='" + person + "'><label for='" + p_list[i].person_name + "'>" + p_list[i].person_name + "</label><br>");
+                $("input:radio").change(function () {
+                    faceNumber.text("");
+                    showButton();
+                    selectedPerson = $('input[type=radio]:checked').val();
+                });
+            }
+        }, function (err) {
+            personList.append("<h3 class='ui message error'>Error: - " + errorCodeList[err] + "</h3>");
+        });
+        $(".my-loader").addClass("hide");
     });
 
     $("#file").change(function () {
@@ -91,7 +91,7 @@ $(function () {
                     notify("Person deleted", "success");
                     personListBtn.click();
                 }, function () {
-                    notify("Impossible to delete person: " + selectedPerson+" - "+errorCodeList[err], "error");
+                    notify("Impossible to delete person: " + selectedPerson + " - " + errorCodeList[err], "error");
                 });
             }
         }).modal('show');
@@ -173,7 +173,7 @@ $(function () {
                 }, function (err) {
                     notify("Add Error: " + errorCodeList[err], "error");
                 });
-            else{
+            else {
                 notify("Operation Complete - Faces Added: 0", "warning");
             }
             $(".my-loader").addClass("hide");
@@ -183,20 +183,20 @@ $(function () {
 
     function detectAndShowErrorSync(file) {
         var detectPromise = detectFromFileSync(file)
-        .then(
-            function (result) {
-                if (result.face.length != 1) {
+            .then(
+                function (result) {
+                    if (result.face.length != 1) {
+                        showErrorMessage();
+                        errorList.append("<li><b>" + file.name + "</b> >>> The image must contain only one face.</li>");
+                    } else {
+                        var face_id = result.face[0].face_id;
+                        face_ids.push(face_id);
+                    }
+                },
+                function (err) {
                     showErrorMessage();
-                    errorList.append("<li><b>" + file.name + "</b> >>> The image must contain only one face.</li>");
-                } else {
-                    var face_id = result.face[0].face_id;
-                    face_ids.push(face_id);
-                }
-            },
-            function (err) {
-                showErrorMessage();
-                errorList.append("<li><b>" + file.name + "</b> >>> Error Detect: " + errorCodeList[err] + ".</li>");
-            });
+                    errorList.append("<li><b>" + file.name + "</b> >>> Error Detect: " + errorCodeList[err] + ".</li>");
+                });
         allPromise.push(detectPromise);
     }
 
@@ -216,10 +216,10 @@ $(function () {
     //Enable closing message
     $('.message .close')
         .on('click', function () {
-        $(this)
-            .closest('.message')
-            .addClass("hide");
-        errorList.children().remove();
-    });
+            $(this)
+                .closest('.message')
+                .addClass("hide");
+            errorList.children().remove();
+        });
 
 });
