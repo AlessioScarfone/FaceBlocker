@@ -1,3 +1,23 @@
+var errorCodeList = {
+    1001: "INTERNAL_ERROR",
+    1003: "AUTHORIZATION_ERROR or INSUFFICIENT_PRIVILEGE_OR_QUOTA_LIMIT_EXCEEDED",
+    1004: "MISSING_ARGUMENTS",
+    1005: "INVALID_ARGUMENTS",
+    1006: "ILLEGAL_USE_OF_DEMO_KEY",
+    1008: "TOO_MANY_ITEMS_TO_ADD",
+    1202: "SERVER_TOO_BUSY",
+    1301: "IMAGE_ERROR_UNSUPPORTED_FORMAT",
+    1302: "IMAGE_ERROR_FAILED_TO_DOWNLOAD",
+    1303: "IMAGE_ERROR_FILE_TOO_LARGE",
+    1304: "IMAGE_ERROR",
+    1501: "BAD_NAME",
+    1502: "BAD_TAG",
+    1503: "NAME_EXIST",
+    "-1": "Error to contact server"
+}
+var minWidth=250;
+var minHeight=250;
+
 setDefaultPerson();
 
 chrome.contextMenus.removeAll();
@@ -26,7 +46,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         var height = img.height;
         var width = img.width;
 
-        if(height>=250 || height>=250){
+        if(width>=minWidth || height>=minHeight){
             detectFromUrl(img_url,function(result){
                 var face_ids=[];
                 for(var index=0;index<result.face.length;index++)
@@ -44,11 +64,12 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                     addFace(face_ids[0],p_name_to_add,function(result){
                         chrome.notifications.create(createNotificationOption("Success","Face Added."));
                     },function(err){
-                        chrome.notifications.create(createNotificationOption("Error","Impossible to add face, retry:"+err.error));
+                        chrome.notifications.create(createNotificationOption("Error","Impossible to add face, retry:"+errorCodeList[err]));
                     });
                 }
             },function(err){
-                chrome.notifications.create(createNotificationOption("Error",err.error));
+                //TODO resize image to big and addFace
+                chrome.notifications.create(createNotificationOption("Error",errorCodeList[err]));
             });
         }       //END IF CHECK DIMENSION
         else{

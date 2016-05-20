@@ -35,12 +35,13 @@
     },
 
     "permissions": [
-        "http://*/",
+        "http://*/*", 
+        "https://*/*", 
         "activeTab",
         "storage",
         "contextMenus",
         "notifications" 
     ],
-     "web_accessible_resources": ["img/stop-256.png"]
+    "web_accessible_resources": ["img/stop-256.png"]
 
 }

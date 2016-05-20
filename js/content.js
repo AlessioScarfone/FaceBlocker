@@ -2,6 +2,9 @@
 //TODO: resize image too big (The picture should be smaller than 3M with at least 16*16 pixels face area.)
 
 var p_name;
+var resizeRatio = 4;
+var minWidth=50;
+var minHeight=50;
 
 chrome.storage.local.get("selectedPerson", function (returnData) {
     p_name = returnData.selectedPerson;
@@ -41,7 +44,7 @@ function blockFace(summaries) {
     for (var i = 0; i < added.length; i++) {
         checkFace(added[i]);
     }
-    if(summaries[0].hasOwnProperty('valueChanged')){
+    if (summaries[0].hasOwnProperty('valueChanged')) {
         var valueChanged = summaries[0].valueChanged;
         // console.log("VC:"+valueChanged.length);
         for (var i = 0; i < valueChanged.length; i++) {
@@ -68,52 +71,36 @@ function checkFace(element) {
     }
 
     //HACK FOR LAZY LOADER
-    if(currentImg[0].hasAttribute("data-original")){
-        img_url=currentImg.attr("data-original");
+    if (currentImg[0].hasAttribute("data-original")) {
+        img_url = currentImg.attr("data-original");
     }
 
     img_url = relativeToAbsoluteUrl(img_url);
+    //TODO converti dataURI To blob
     if (isDataUri(img_url) === false) {
         var img = new Image();
         img.src = img_url;
         img.onload = function () {
             imgHeight = img.naturalHeight;
             imgWidth = img.naturalWidth;
-            if (imgWidth <= 50 || imgHeight <= 50){
+            if (imgWidth <= minWidth || imgHeight <= minHeight) {
                 currentImg.addClass("ignored-for-dimension");
-            }
+            } 
+            //            else if (imgWidth > 4000 || imgHeight > 4000) {
+            //                console.log("resize");
+            //                tooLargeImageCheck(img_url,currentImg);
+            //            }
             else {
                 detectFromUrlSync(img_url).then(function (result) {
-                    //Array of Face_ID detected
-                    var face_ids = [];
-                    for (var index = 0; index < result.face.length; index++)
-                        face_ids.push(result.face[index].face_id);
-
-                    if (face_ids.length > 1) {
-                        currentImg.addClass("double-face-detect");
-                        //console.log(face_ids);
-                    }
-                    if (face_ids.length == 0) {
-                        currentImg.addClass("no-face-detect");
-                        // console.info("noFaceDetected->url: "+img_url);
-                    }
-
-                    for (var i = 0; i < face_ids.length; i++) {
-                        verify(p_name, face_ids[i], function (res) {
-                            if (res.is_same_person == true) {
-                                obscure(currentImg);
-                            } else {
-                                //                        console.info("notObscured->url: "+img_url);
-                                currentImg.addClass("not-obscured");
-                            }
-                        }); //END VERIFY
-                    }
+                    successCallback(result,currentImg);
                 }, function (reason) {
-                    currentImg.addClass("error");
-                    console.error("FAIL:" + reason);
-                });     //END DETECT
+                    errorCallback(reason,currentImg,img_url);
+                }); //END DETECT
             }
         }
+    }
+    else{
+        console.error("DATA URI");
     }
 };
 
@@ -130,16 +117,43 @@ function obscure(img) {
     img.addClass("obscured");
 }
 
-//Ignore images with small size
-//function checkImgDimension(img) {
-//    var width = img.width();
-//    var height = img.height();
-//    //    console.log(width+"--"+height+"--"+img.attr("src"));
-//    if (width <= 50 || height <= 50)
-//        return false;
-//    return true;
-//}
 
+function successCallback(result,currentImg){
+    //Array of Face_ID detected
+    var face_ids = [];
+    for (var index = 0; index < result.face.length; index++)
+        face_ids.push(result.face[index].face_id);
+
+    if (face_ids.length > 1) {
+        currentImg.addClass("double-face-detect");
+        //console.log(face_ids);
+    }
+    if (face_ids.length == 0) {
+        currentImg.addClass("no-face-detect");
+        // console.info("noFaceDetected->url: "+img_url);
+    }
+
+    for (var i = 0; i < face_ids.length; i++) {
+        verify(p_name, face_ids[i], function (res) {
+            if (res.is_same_person == true) {
+                obscure(currentImg);
+            } else {
+                //console.info("notObscured->url: "+img_url);
+                currentImg.addClass("not-obscured");
+            }
+        }); //END VERIFY
+    }
+}
+
+function errorCallback(reason,currentImg,img_url){
+    currentImg.addClass("error");
+    console.error("FAIL:" + reason);
+
+    if (reason == "1303") {//TOO LARGE IMAGE ERROR
+        console.info(img_url+" is too big -> resize and retry");
+        tooLargeImageCheck(img_url,currentImg);
+    }
+}
 
 function isDataUri(img_url) {
     if (/^data:image/.test(img_url)) {
@@ -148,6 +162,39 @@ function isDataUri(img_url) {
     }
     return false;
 }
+
+
+function tooLargeImageCheck(img_url,currentImg) {
+    var canvas = document.createElement("canvas");
+    var canvasContext = canvas.getContext("2d");
+    imgToResize = new Image();
+    imgToResize.onload = function () {
+        var w = imgToResize.width;
+        var h = imgToResize.height;
+        canvas.width = w / resizeRatio;
+        canvas.height = h / resizeRatio;
+        canvasContext.drawImage(imgToResize, 0, 0, w / resizeRatio, h / resizeRatio);
+
+        //        $("body").append(canvas);
+        if (canvas.toBlob) {
+            canvas.toBlob(
+                function (blob) {
+                    //                    console.log(blob);
+                    detectFromFileSync(blob).then(function (result) {
+                        successCallback(result,currentImg);
+                    }, function (reason) {
+                        errorCallback(reason,currentImg,img_url);
+                    }); //END DETECT
+                },
+                'image/jpeg'
+            );
+        }
+
+    }
+    //    $("body").append(canvas);
+    imgToResize.src = img_url;
+}
+
 
 
 // If url is relative, convert to absolute.
