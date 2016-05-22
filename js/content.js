@@ -1,5 +1,5 @@
 //TODO: image format unsupported (webp,svg) 
-//TODO: resize image too big (The picture should be smaller than 3M with at least 16*16 pixels face area.)
+//resize image too big (The picture should be smaller than 3M with at least 16*16 pixels face area.)
 
 var p_name;
 var resizeRatio = 4;
@@ -191,7 +191,6 @@ function tooLargeImageCheck(img_url,currentImg) {
         }
 
     }
-    //    $("body").append(canvas);
     imgToResize.src = img_url;
 }
 
