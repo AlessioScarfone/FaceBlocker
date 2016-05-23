@@ -151,11 +151,12 @@ $(function () {
     var face_ids = [];
     var resizeRatio = 4;
     var maxFileSize=3; //MB
+    var bigImagePresent=false;
 
     function DetectAndAdd(files) {
         allPromise = [];
         face_ids = [];
-
+        bigImagePresent=false;
         if (selectedPerson != null && selectedPerson != undefined) {
             for (var i = 0; i < files.length; i++)
                 detectAndShowErrorSync(files[i]);
@@ -178,7 +179,9 @@ $(function () {
             else {
                 notify("Operation Complete - Faces Added: 0 <br> (Wait For Too Big Image)", "warning");
             }
-            $(".my-loader").addClass("hide");
+            console.log(bigImagePresent);
+            if(bigImagePresent==false)
+                $(".my-loader").addClass("hide");
             console.log(allPromise.length + " - face_ids size: " + face_ids.length);
         });
     }
@@ -205,6 +208,7 @@ $(function () {
         } else {
             //resize image to big
             notify(file.name + " is too big. We try to resize and add to person.", "warning");
+            bigImagePresent=true;
             addTooBigImage(file);
         }
     }
@@ -234,12 +238,16 @@ $(function () {
                                 var face_id = result.face[0].face_id;
                                 addFace(face_id, selectedPerson, function (result) {
                                     notify(file.name+" : image resize and added.","information");
-//                                    console.log(file.name+"-"+face_id);
+                                    //                                    console.log(file.name+"-"+face_id);
+                                    
                                 });
                             }
+                            $(".my-loader").addClass("hide");
                         }, function (err) {
                             chrome.notifications.create(createNotificationOption("Error", errorCodeList[err]));
+                            $(".my-loader").addClass("hide");
                         }); //END DETECT
+
                     },
                     'image/jpeg'
                 );
