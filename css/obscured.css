@@ -1,5 +1,5 @@
 .obscured{
-/* background-image: url("https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/stop-256.png");*/
+    /* background-image: url("https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/stop-256.png");*/
     background-image: url('chrome-extension://__MSG_@@extension_id__/img/stop-256.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -18,7 +18,7 @@
 }
 
 .double-face-detect{
-     border:5px solid yellow !important;
+    border:5px solid yellow !important;
 }
 
 .double-face-detect.not-obscured{
@@ -33,15 +33,15 @@
     border: 7px dotted RED !important;
 }
 .error.not-obscured {
-  border: 5px solid lightgreen !important;
+    border: 5px solid lightgreen !important;
 }
 .error.no-face-detect {
-  border: 5px solid gray !important;
+    border: 5px solid gray !important;
 }
 .error.obscured {
-  /* background-image: url("https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/stop-256.png");*/
-  background-image: url('chrome-extension://__MSG_@@extension_id__/img/stop-256.png');
-  background-repeat: no-repeat;
-  background-position: center;
+    border: 0px !important;
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/stop-256.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
