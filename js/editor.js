@@ -213,7 +213,6 @@ $(function () {
         }
     }
 
-    //FIXME
     function addTooBigImage(current_file) {
         var file=current_file
         var canvas = document.createElement("canvas");
