@@ -149,6 +149,8 @@ $(function () {
 
     var allPromise = [];
     var face_ids = [];
+    var resizeRatio = 4;
+    var maxFileSize=3; //MB
 
     function DetectAndAdd(files) {
         allPromise = [];
@@ -174,7 +176,7 @@ $(function () {
                     notify("Add Error: " + errorCodeList[err], "error");
                 });
             else {
-                notify("Operation Complete - Faces Added: 0", "warning");
+                notify("Operation Complete - Faces Added: 0 <br> (Wait For Too Big Image)", "warning");
             }
             $(".my-loader").addClass("hide");
             console.log(allPromise.length + " - face_ids size: " + face_ids.length);
@@ -182,12 +184,14 @@ $(function () {
     }
 
     function detectAndShowErrorSync(file) {
-        var detectPromise = detectFromFileSync(file)
+        var file_size = (file.size / 1024) / 1024; //size in MB del file
+        if (file_size < maxFileSize) {
+            var detectPromise = detectFromFileSync(file)
             .then(
                 function (result) {
                     if (result.face.length != 1) {
                         showErrorMessage();
-                        errorList.append("<li><b>" + file.name + "</b> >>> The image must contain only one face.</li>");
+                        errorList.append("<li><b>" + file.name + "</b> >>> The image must contain one face.</li>");
                     } else {
                         var face_id = result.face[0].face_id;
                         face_ids.push(face_id);
@@ -197,8 +201,54 @@ $(function () {
                     showErrorMessage();
                     errorList.append("<li><b>" + file.name + "</b> >>> Error Detect: " + errorCodeList[err] + ".</li>");
                 });
-        allPromise.push(detectPromise);
+            allPromise.push(detectPromise);
+        } else {
+            //resize image to big
+            notify(file.name + " is too big. We try to resize and add to person.", "warning");
+            addTooBigImage(file);
+        }
     }
+
+    //FIXME
+    function addTooBigImage(current_file) {
+        var file=current_file
+        var canvas = document.createElement("canvas");
+        var canvasContext = canvas.getContext("2d");
+        var imgToResize = new Image();
+        imgToResize.onload = function () {
+            var w = imgToResize.width;
+            var h = imgToResize.height;
+            canvas.width = w / resizeRatio;
+            canvas.height = h / resizeRatio;
+            canvasContext.drawImage(imgToResize, 0, 0, w / resizeRatio, h / resizeRatio);
+
+            if (canvas.toBlob) {
+                canvas.toBlob(
+                    function (blob) {
+                        detectFromFileSync(blob)
+                            .then(function (result) {
+                            if (result.face.length != 1) {
+                                showErrorMessage();
+                                errorList.append("<li><b>" + file.name + "</b> >>> The image must contain only one face.</li>");
+                            } else {
+                                var face_id = result.face[0].face_id;
+                                addFace(face_id, selectedPerson, function (result) {
+                                    notify(file.name+" : image resize and added.","information");
+//                                    console.log(file.name+"-"+face_id);
+                                });
+                            }
+                        }, function (err) {
+                            chrome.notifications.create(createNotificationOption("Error", errorCodeList[err]));
+                        }); //END DETECT
+                    },
+                    'image/jpeg'
+                );
+            }
+            URL.revokeObjectURL(imgToResize.src);
+        }
+        imgToResize.src = URL.createObjectURL(file);;
+    }
+
 
     function showErrorMessage() {
         if (errorListMessage.hasClass("hide"))
@@ -216,10 +266,10 @@ $(function () {
     //Enable closing message
     $('.message .close')
         .on('click', function () {
-            $(this)
-                .closest('.message')
-                .addClass("hide");
-            errorList.children().remove();
-        });
+        $(this)
+            .closest('.message')
+            .addClass("hide");
+        errorList.children().remove();
+    });
 
 });

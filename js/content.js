@@ -167,7 +167,7 @@ function isDataUri(img_url) {
 function tooLargeImageCheck(img_url,currentImg) {
     var canvas = document.createElement("canvas");
     var canvasContext = canvas.getContext("2d");
-    imgToResize = new Image();
+    var imgToResize = new Image();
     imgToResize.onload = function () {
         var w = imgToResize.width;
         var h = imgToResize.height;
