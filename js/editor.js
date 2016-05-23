@@ -179,7 +179,7 @@ $(function () {
             else {
                 notify("Operation Complete - Faces Added: 0 <br> (Wait For Too Big Image)", "warning");
             }
-            console.log(bigImagePresent);
+//            console.log(bigImagePresent);
             if(bigImagePresent==false)
                 $(".my-loader").addClass("hide");
             console.log(allPromise.length + " - face_ids size: " + face_ids.length);
