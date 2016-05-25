@@ -49,39 +49,62 @@ getPersonList(function (result) {
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
     var p_name_to_add = info.menuItemId;
     var img_url = info.srcUrl;
-
     var img = new Image();
     img.src = img_url;
-    img.addEventListener("load", function () {
-        var height = img.height;
-        var width = img.width;
-
-        if (width >= minWidth || height >= minHeight) {
-            detectFromUrl(img_url, function (result) {
-                var face_ids = [];
-                for (var index = 0; index < result.face.length; index++)
-                    face_ids.push(result.face[index].face_id);
-                console.log(result.face.length);
-                faceIdCheck(face_ids, p_name_to_add);
-            }, function (err) {
-                //resize image to big and addFace
-                if (err == "1303") {
-                    chrome.notifications.create(createNotificationOption("Wait", errorCodeList[err]));
-                    addTooBigImage(img_url,p_name_to_add);
-                } else {
-                    chrome.notifications.create(createNotificationOption("Error", errorCodeList[err]));
-                }
-            });
-        } //END IF CHECK DIMENSION
-        else {
-            chrome.notifications.create(createNotificationOption("Error", "Image too small."));
-        }
-    }); //END LOAD EVENT LISTENER
+    if (isDataUri(img_url) === false) {
+        img.addEventListener("load", function () {
+            var height = img.height;
+            var width = img.width;
+//            console.log(width + "x" + height);
+            if (width >= minWidth || height >= minHeight) {
+                detectFromUrl(img_url, function (result) {
+                    var face_ids = [];
+                    for (var index = 0; index < result.face.length; index++)
+                        face_ids.push(result.face[index].face_id);
+//                    console.log(result.face.length);
+                    checkFaceId(face_ids, p_name_to_add);
+                }, function (err) {
+                    //resize image to big and addFace
+                    if (err == "1303") {
+                        chrome.notifications.create(createNotificationOption("Wait", errorCodeList[err]));
+                        addTooBigImage(img_url, p_name_to_add);
+                    } else {
+                        chrome.notifications.create(createNotificationOption("Error", errorCodeList[err]));
+                    }
+                });
+            } //END IF CHECK DIMENSION
+            else {
+                chrome.notifications.create(createNotificationOption("Error", "Image too small."));
+            }
+        }); //END LOAD EVENT LISTENER
+    } else {
+//        console.log("DATAURI");
+        var blob = window.dataURLtoBlob && window.dataURLtoBlob(img_url);
+        checkFaceFromBlob(blob,p_name_to_add);
+    }
 });
 
+/**
+ * Detect face and try to add face from a blob
+ * @param {object} blob blob object of image
+ */
+function checkFaceFromBlob(blob,p_name_to_add){
+    detectFromFileSync(blob).then(function (result) {
+        var face_ids = [];
+        for (var index = 0; index < result.face.length; index++)
+            face_ids.push(result.face[index].face_id);
+        checkFaceId(face_ids, p_name_to_add);
+    }, function (err) {
+        chrome.notifications.create(createNotificationOption("Error", errorCodeList[err]));
+    }); //END DETECT
+}
 
-
-function faceIdCheck(face_ids, p_name_to_add) {
+/**
+ * Check if image contain only one face
+ * @param {Array}  face_ids      Array of face id
+ * @param {string} p_name_to_add person's name where add face
+ */
+function checkFaceId(face_ids, p_name_to_add) {
     if (face_ids.length > 1) {
         chrome.notifications.create(createNotificationOption("Error", "Too many faces."));
         return;
@@ -97,8 +120,12 @@ function faceIdCheck(face_ids, p_name_to_add) {
         });
     }
 }
-
-function addTooBigImage(img_url,p_name_to_add) {
+/**
+ * Try to add face to person when the image is bigger the 3MB 
+ * @param {string} img_url       Image Url
+ * @param {string} p_name_to_add person's name where add face
+ */
+function addTooBigImage(img_url, p_name_to_add) {
     var canvas = document.createElement("canvas");
     var canvasContext = canvas.getContext("2d");
     var imgToResize = new Image();
@@ -113,14 +140,7 @@ function addTooBigImage(img_url,p_name_to_add) {
         if (canvas.toBlob) {
             canvas.toBlob(
                 function (blob) {
-                    detectFromFileSync(blob).then(function (result) {
-                        var face_ids = [];
-                        for (var index = 0; index < result.face.length; index++)
-                            face_ids.push(result.face[index].face_id);
-                        faceIdCheck(face_ids,p_name_to_add);
-                    }, function (err) {
-                        chrome.notifications.create(createNotificationOption("Error", errorCodeList[err]));
-                    }); //END DETECT
+                    checkFaceFromBlob(blob);
                 },
                 'image/jpeg'
             );
@@ -173,4 +193,17 @@ function setDefaultPerson() {
             });
         }
     });
+}
+
+/**
+ * Check if the image url is in Data Uri Format
+ * @param   {String}  img_url Url of image
+ * @returns {boolean} 
+ */
+function isDataUri(img_url) {
+    if (/^data:image/.test(img_url)) {
+        // console.info(img_url+" -> DataURI");
+        return true;
+    }
+    return false;
 }

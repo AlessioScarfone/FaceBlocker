@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "FaceBlocker",
-    "version": "0.0.0.1",
+    "version": "0.0.1",
     "author": "Alessio Scarfone",
 
     "browser_action": {
@@ -13,7 +13,7 @@
     },
     "content_scripts": [{
         "matches": [ "<all_urls>"],
-        "exclude_globs": ["*://*.google.*/*"],      //blocca estensione su google
+        "exclude_globs": ["*://*.google.*/*"],
         "css": ["css/obscured.css"],
         "js": [
             "js/lib/jquery-2.2.2.min.js",
@@ -21,15 +21,17 @@
             "js/lib/facepp-sdk.min.js",
             "js/lib/facePPWrapper.js",
             "js/lib/mutation-summary.js",
+            "js/lib/canvas-to-blob.min.js",
             "js/content.js"],
-        "all_frames": true
-        ,"run_at":  "document_start"
+        "all_frames": true,
+        "run_at":  "document_start"
     }],
     "background": {
         "scripts": [ "js/lib/jquery-2.2.2.min.js",
                     "js/lib/q.js",
                     "js/lib/facepp-sdk.min.js",
                     "js/lib/facePPWrapper.js",
+                    "js/lib/canvas-to-blob.min.js",
                     "js/eventPage.js"],
         "persistent": false
     },
@@ -43,5 +45,7 @@
         "notifications" 
     ],
     "web_accessible_resources": ["img/stop-256.png"]
+
+
 
 }

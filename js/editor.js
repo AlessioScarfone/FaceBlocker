@@ -89,6 +89,7 @@ $(function () {
                 //                var selectedPerson = $('input[type=radio]:checked').val();
                 deletePerson(selectedPerson, function () {
                     notify("Person deleted", "success");
+                    checkCurrentPersonIsDeleted(selectedPerson);
                     personListBtn.click();
                 }, function () {
                     notify("Impossible to delete person: " + selectedPerson + " - " + errorCodeList[err], "error");
@@ -106,6 +107,20 @@ $(function () {
 
 
     //_______________________________________________________________________
+
+    function checkCurrentPersonIsDeleted(selectedPerson){
+        chrome.storage.local.get("selectedPerson", function (returnData) {
+            var p_name = returnData.selectedPerson;
+            if (p_name === selectedPerson) {
+                getPersonList(function (res) {
+                    p_name = res.person[0].person_name;
+                    chrome.storage.local.set({
+                        "selectedPerson": p_name
+                    });
+                });
+            }
+        });
+    }
 
     function clearList() {
         personList.children().remove();
@@ -179,7 +194,7 @@ $(function () {
             else {
                 notify("Operation Complete - Faces Added: 0 <br> (Wait For Too Big Image)", "warning");
             }
-//            console.log(bigImagePresent);
+            //            console.log(bigImagePresent);
             if(bigImagePresent==false)
                 $(".my-loader").addClass("hide");
             console.log(allPromise.length + " - face_ids size: " + face_ids.length);
@@ -238,7 +253,7 @@ $(function () {
                                 addFace(face_id, selectedPerson, function (result) {
                                     notify(file.name+" : image resize and added.","information");
                                     //                                    console.log(file.name+"-"+face_id);
-                                    
+
                                 });
                             }
                             $(".my-loader").addClass("hide");

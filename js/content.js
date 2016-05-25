@@ -100,7 +100,13 @@ function checkFace(element) {
         }
     }
     else{
-        console.error("DATA URI");
+//      console.error("DATA URI");
+        var blob = window.dataURLtoBlob && window.dataURLtoBlob(img_url);
+        detectFromFileSync(blob).then(function (result) {
+            successCallback(result,currentImg);
+        }, function (reason) {
+            errorCallback(reason,currentImg,img_url);
+        }); //END DETECT
     }
 };
 
