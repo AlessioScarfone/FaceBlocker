@@ -1,5 +1,4 @@
 //TODO: image format unsupported (webp,svg) 
-//resize image too big (The picture should be smaller than 3M with at least 16*16 pixels face area.)
 
 var p_name;
 var resizeRatio = 4;
