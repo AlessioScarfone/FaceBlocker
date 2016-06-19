@@ -2,8 +2,8 @@
 
 var p_name;
 var resizeRatio = 4;
-var minWidth=50;
-var minHeight=50;
+var minWidth = 50;
+var minHeight = 50;
 
 chrome.storage.local.get("selectedPerson", function (returnData) {
     p_name = returnData.selectedPerson;
@@ -58,9 +58,6 @@ function checkFace(element) {
         var currentImg = $(element);
 
     var img_url = currentImg.attr("src");
-    // if(img_url==undefined){
-    // console.info(currentImg);
-    // }
     //Get src of bigger image in srcset
     if (currentImg[0].hasAttribute("srcset")) {
         var srcsetType = currentImg.attr("srcset").split(",");
@@ -74,9 +71,8 @@ function checkFace(element) {
         img_url = currentImg.attr("data-original");
     }
 
-    img_url = relativeToAbsoluteUrl(img_url);
-    //TODO converti dataURI To blob
     if (isDataUri(img_url) === false) {
+        img_url = relativeToAbsoluteUrl(img_url);
         var img = new Image();
         img.src = img_url;
         img.onload = function () {
@@ -84,27 +80,26 @@ function checkFace(element) {
             imgWidth = img.naturalWidth;
             if (imgWidth <= minWidth || imgHeight <= minHeight) {
                 currentImg.addClass("ignored-for-dimension");
-            } 
+            }
             //            else if (imgWidth > 4000 || imgHeight > 4000) {
             //                console.log("resize");
             //                tooLargeImageCheck(img_url,currentImg);
             //            }
             else {
                 detectFromUrlSync(img_url).then(function (result) {
-                    successCallback(result,currentImg);
+                    successCallback(result, currentImg);
                 }, function (reason) {
-                    errorCallback(reason,currentImg,img_url);
+                    errorCallback(reason, currentImg, img_url);
                 }); //END DETECT
             }
         }
-    }
-    else{
-//      console.error("DATA URI");
+    } else {
+        // console.error("DATA URI");
         var blob = window.dataURLtoBlob && window.dataURLtoBlob(img_url);
         detectFromFileSync(blob).then(function (result) {
-            successCallback(result,currentImg);
+            successCallback(result, currentImg);
         }, function (reason) {
-            errorCallback(reason,currentImg,img_url);
+            errorCallback(reason, currentImg, img_url);
         }); //END DETECT
     }
 };
@@ -123,7 +118,7 @@ function obscure(img) {
 }
 
 
-function successCallback(result,currentImg){
+function successCallback(result, currentImg) {
     //Array of Face_ID detected
     var face_ids = [];
     for (var index = 0; index < result.face.length; index++)
@@ -150,13 +145,13 @@ function successCallback(result,currentImg){
     }
 }
 
-function errorCallback(reason,currentImg,img_url){
+function errorCallback(reason, currentImg, img_url) {
     currentImg.addClass("error");
     console.error("FAIL:" + reason);
 
-    if (reason == "1303") {//TOO LARGE IMAGE ERROR
-        console.info(img_url+" is too big -> resize and retry");
-        tooLargeImageCheck(img_url,currentImg);
+    if (reason == "1303") { //TOO LARGE IMAGE ERROR
+        console.info(img_url + " is too big -> resize and retry");
+        tooLargeImageCheck(img_url, currentImg);
     }
 }
 
@@ -169,7 +164,7 @@ function isDataUri(img_url) {
 }
 
 
-function tooLargeImageCheck(img_url,currentImg) {
+function tooLargeImageCheck(img_url, currentImg) {
     var canvas = document.createElement("canvas");
     var canvasContext = canvas.getContext("2d");
     var imgToResize = new Image();
@@ -180,15 +175,14 @@ function tooLargeImageCheck(img_url,currentImg) {
         canvas.height = h / resizeRatio;
         canvasContext.drawImage(imgToResize, 0, 0, w / resizeRatio, h / resizeRatio);
 
-        //        $("body").append(canvas);
         if (canvas.toBlob) {
             canvas.toBlob(
                 function (blob) {
                     //                    console.log(blob);
                     detectFromFileSync(blob).then(function (result) {
-                        successCallback(result,currentImg);
+                        successCallback(result, currentImg);
                     }, function (reason) {
-                        errorCallback(reason,currentImg,img_url);
+                        errorCallback(reason, currentImg, img_url);
                     }); //END DETECT
                 },
                 'image/jpeg'
@@ -205,7 +199,7 @@ function tooLargeImageCheck(img_url,currentImg) {
 function relativeToAbsoluteUrl(url) {
     if (!url)
         return url;
-
+    
     // If URL is already absolute
     if (/^[a-zA-Z\-]+\:/.test(url))
         return url;
