@@ -1,12 +1,13 @@
 body{
     margin: 15px !important;
-    min-width:200px;
+    min-width:310px;
     max-height:250px; 
 }
 
 .ui.container{
     margin-top: 10px;
     margin-bottom: 10px;
+    min-width:310px;
 }
 
 .hide{
