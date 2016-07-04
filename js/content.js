@@ -112,8 +112,8 @@ function obscure(img) {
     img.css("height", height);
 
     img.attr("alt", "Obscured by FaceBlocker")
-    img.attr("src", "");
-    img.attr("srcset", "");
+    img.attr("src", " ");
+    img.attr("srcset", " ");
     img.addClass("obscured");
 }
 
